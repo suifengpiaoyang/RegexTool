@@ -143,10 +143,15 @@ class MainWindow:
             return None
 
     def _get_string_wrapper(self, text):
-        flags = ["'", '"', "'''", '"""']
-        for flag in flags:
+        for flag in ("'", '"'):
             if flag not in text:
                 return flag
+        if "'''" not in text:
+            if not text.endswith("'"):
+                return "'''"
+        if '"""' not in text:
+            if not text.endswith('"'):
+                return '"""'
         return None
 
     def _load_ui_file(self, ui_path):
