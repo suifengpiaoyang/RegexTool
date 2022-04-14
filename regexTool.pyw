@@ -49,7 +49,7 @@ class MainWindow:
     def combobox_changed(self):
         self.ui.statusBar().showMessage('')
         method = self.ui.comboBox.currentText()
-        if method == 'sub':
+        if method in ('sub', 'subn'):
             self.ui.frame.show()
         else:
             self.ui.frame.hide()
@@ -95,7 +95,7 @@ class MainWindow:
         if command_text is None:
             self._show_wrapper_error('Input Text')
             return
-        if method == 'sub':
+        if method in ('sub', 'subn'):
             replace_text = self.ui.lineEditReplaceText.text()
             command_replace_text = self._get_command(replace_text)
             if command_replace_text is None:
