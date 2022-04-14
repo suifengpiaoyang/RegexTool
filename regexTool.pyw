@@ -3,7 +3,8 @@ import re
 import sys
 import traceback
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtGui import QGuiApplication
+from PySide2.QtGui import (QGuiApplication,
+                           QTextCursor)
 from PySide2.QtWidgets import (QApplication,
                                QMessageBox)
 from PySide2.QtCore import QFile, QIODevice
@@ -57,6 +58,7 @@ class MainWindow:
     def show_document(self):
         message = re.__doc__
         self.document_ui.textEdit.insertPlainText(message)
+        self.document_ui.textEdit.moveCursor(QTextCursor.Start)
         self.document_ui.show()
 
     def run(self):
