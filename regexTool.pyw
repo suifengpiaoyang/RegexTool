@@ -39,6 +39,7 @@ class MainWindow:
         self.ui.textEditInputText.clear()
         self.ui.lineEditPattern.clear()
         self.ui.textEditResult.clear()
+        self.ui.statusBar().clearMessage()
         self.ui.textEditInputText.setFocus()
 
     def combobox_changed(self):
@@ -63,6 +64,7 @@ class MainWindow:
 
     def run(self):
         self.ui.textEditResult.clear()
+        self.ui.statusBar().clearMessage()
         method = self.ui.comboBox.currentText()
         pattern = self.ui.lineEditPattern.text()
         params = self._get_checked_box()
