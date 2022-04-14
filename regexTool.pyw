@@ -20,7 +20,7 @@ class MainWindow:
                                           'ui', 're_document.ui')
         self.document_ui = self._load_ui_file(self.document_path)
         method = self.ui.comboBox.currentText()
-        if method != 'sub':
+        if method not in ('sub', 'subn'):
             self.ui.frame.hide()
         self.ui.textEditInputText.setFocus()
         self.ui.pushButtonClear.clicked.connect(self.clear)
