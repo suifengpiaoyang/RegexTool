@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>Regex Tool</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -217,8 +220,13 @@
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -229,6 +237,17 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
    <property name="sizeGripEnabled">
     <bool>true</bool>
    </property>
