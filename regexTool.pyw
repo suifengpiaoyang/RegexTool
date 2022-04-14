@@ -83,17 +83,27 @@ class MainWindow:
             QMessageBox.critical(self.ui, '错误', 'Pattern 不能为空。')
             self.ui.lineEditPattern.setFocus()
             return
-        # 这里还没有处理各种带 ' 和 "
-        # 会导致很多错误
         if not params:
             flags = 0
         else:
             flags = '|'.join(params)
+        command_pattern = self._get_command(pattern)
+        command_text = self._get_command(text)
+        if command_pattern is None:
+            self._show_wrapper_error('Pattern')
+            return
+        if command_text is None:
+            self._show_wrapper_error('Input Text')
+            return
         if method == 'sub':
             replace_text = self.ui.lineEditReplaceText.text()
-            command = f"re.{method}(r'{pattern}', r'{replace_text}', r'{text}', flags={flags})"
+            command_replace_text = self._get_command(replace_text)
+            if command_replace_text is None:
+                self._show_wrapper_error('Replace Text')
+                return
+            command = f"re.{method}({command_pattern}, {command_replace_text}, {command_text}, flags={flags})"
         else:
-            command = f"re.{method}(r'{pattern}', r'{text}', flags={flags})"
+            command = f"re.{method}({command_pattern}, {command_text}, flags={flags})"
         command = re.sub(r'\, flags\=0\)$', r')', command)
         self.copy_message = command
         try:
@@ -124,6 +134,21 @@ class MainWindow:
             checked.append('re.U')
         return checked
 
+    def _get_command(self, text):
+
+        flag = self._get_string_wrapper(text)
+        if flag:
+            return f"r{flag}{text}{flag}"
+        else:
+            return None
+
+    def _get_string_wrapper(self, text):
+        flags = ["'", '"', "'''", '"""']
+        for flag in flags:
+            if flag not in text:
+                return flag
+        return None
+
     def _load_ui_file(self, ui_path):
         """Load ui file return a pyside object.
         """
@@ -132,6 +157,13 @@ class MainWindow:
         window = loader.load(ui_file)
         ui_file.close()
         return window
+
+    def _show_wrapper_error(self, text):
+        flags = ["'", '"', "'''", '"""']
+        message = f'{text} 中含有全四种字符串类型\n' + \
+            '\'\t\"\t\'\'\'\t\"\"\"\n' + \
+            '请用反斜杠转义掉[\'\'\',\"\"\"]中一种再运行程序。'
+        QMessageBox.critical(self.ui, '错误', message)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
