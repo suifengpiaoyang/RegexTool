@@ -19,6 +19,9 @@ class MainWindow:
         self.document_path = os.path.join(self.BASE_DIR,
                                           'ui', 're_document.ui')
         self.document_ui = self._load_ui_file(self.document_path)
+        method = self.ui.comboBox.currentText()
+        if method != 'sub':
+            self.ui.frame.hide()
         self.ui.textEditInputText.setFocus()
         self.ui.pushButtonClear.clicked.connect(self.clear)
         self.ui.pushButtonCopy.clicked.connect(self.copy)
@@ -39,6 +42,7 @@ class MainWindow:
         self.ui.textEditInputText.clear()
         self.ui.lineEditPattern.clear()
         self.ui.textEditResult.clear()
+        self.ui.lineEditReplaceText.clear()
         self.ui.statusBar().clearMessage()
         self.ui.textEditInputText.setFocus()
 
@@ -46,7 +50,9 @@ class MainWindow:
         self.ui.statusBar().showMessage('')
         method = self.ui.comboBox.currentText()
         if method == 'sub':
-            pass
+            self.ui.frame.show()
+        else:
+            self.ui.frame.hide()
 
     def copy(self):
         pattern = self.ui.lineEditPattern.text()
@@ -77,11 +83,18 @@ class MainWindow:
             QMessageBox.critical(self.ui, '错误', 'Pattern 不能为空。')
             self.ui.lineEditPattern.setFocus()
             return
+        # 这里还没有处理各种带 ' 和 "
+        # 会导致很多错误
         if not params:
-            command = f"re.{method}(r'{pattern}', '{text}')"
+            flags = 0
         else:
-            flag = '|'.join(params)
-            command = f"re.{method}(r'{pattern}', '{text}', {flag})"
+            flags = '|'.join(params)
+        if method == 'sub':
+            replace_text = self.ui.lineEditReplaceText.text()
+            command = f"re.{method}(r'{pattern}', r'{replace_text}', r'{text}', flags={flags})"
+        else:
+            command = f"re.{method}(r'{pattern}', r'{text}', flags={flags})"
+        command = re.sub(r'\, flags\=0\)$', r')', command)
         self.copy_message = command
         try:
             result = eval(command)
