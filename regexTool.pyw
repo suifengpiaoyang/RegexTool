@@ -9,10 +9,6 @@ from PySide2.QtWidgets import (QApplication,
 from PySide2.QtCore import QFile, QIODevice
 
 
-from functools import wraps
-from threading import Thread
-
-
 class MainWindow:
 
     def __init__(self):
