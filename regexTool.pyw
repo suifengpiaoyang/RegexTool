@@ -143,9 +143,10 @@ class MainWindow:
             return None
 
     def _get_string_wrapper(self, text):
-        for flag in ("'", '"'):
-            if flag not in text:
-                return flag
+        if '\n' not in text:
+            for flag in ("'", '"'):
+                if flag not in text:
+                    return flag
         if "'''" not in text:
             if not text.endswith("'"):
                 return "'''"
