@@ -47,7 +47,8 @@ class MainWindow:
         self.ui.textEditInputText.setFocus()
 
     def combobox_changed(self):
-        self.ui.statusBar().showMessage('')
+        self.copy_message = None
+        self.ui.statusBar().clearMessage()
         method = self.ui.comboBox.currentText()
         if method in ('sub', 'subn'):
             self.ui.frame.show()
