@@ -2,12 +2,23 @@ import os
 import re
 import sys
 import traceback
+from functools import wraps
+from threading import Thread
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtGui import (QGuiApplication,
                            QTextCursor)
 from PySide2.QtWidgets import (QApplication,
                                QMessageBox)
 from PySide2.QtCore import QFile, QIODevice
+
+
+
+def new_thread(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        t = Thread(target=func, args=args, kwargs=kwargs)
+        t.start()
+    return wrapper
 
 
 class MainWindow:
@@ -27,6 +38,7 @@ class MainWindow:
         self.ui.pushButtonCopy.clicked.connect(self.copy)
         self.ui.pushButtonRun.clicked.connect(self.run)
         self.ui.actionRegex_document.triggered.connect(self.show_document)
+        self.ui.actionTest_in_IDLE_2.triggered.connect(self.test_in_idle)
         self.ui.comboBox.currentIndexChanged.connect(self.combobox_changed)
         self.copy_message = None
 
@@ -62,12 +74,6 @@ class MainWindow:
         else:
             QGuiApplication.clipboard().setText(self.copy_message)
             QMessageBox.about(self.ui, '提示', f'{self.copy_message}\n已复制到剪切板')
-
-    def show_document(self):
-        message = re.__doc__
-        self.document_ui.textEdit.insertPlainText(message)
-        self.document_ui.textEdit.moveCursor(QTextCursor.Start)
-        self.document_ui.show()
 
     def run(self):
         self.ui.textEditResult.clear()
@@ -116,6 +122,17 @@ class MainWindow:
         except:
             message = traceback.format_exc()
         self.ui.textEditResult.insertPlainText(message)
+
+    def show_document(self):
+        message = re.__doc__
+        self.document_ui.textEdit.insertPlainText(message)
+        self.document_ui.textEdit.moveCursor(QTextCursor.Start)
+        self.document_ui.show()
+
+    @new_thread
+    def test_in_idle(self):
+        cmd = 'python -m idlelib -c "import re"'
+        os.system(cmd)
 
     def _get_checked_box(self):
         checked = []

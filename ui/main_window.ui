@@ -281,6 +281,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionRegex_document"/>
+    <addaction name="actionTest_in_IDLE_2"/>
    </widget>
    <addaction name="menuHelp"/>
   </widget>
@@ -306,6 +307,11 @@
    </property>
   </action>
   <action name="actionTest_in_IDLE">
+   <property name="text">
+    <string>Test in IDLE</string>
+   </property>
+  </action>
+  <action name="actionTest_in_IDLE_2">
    <property name="text">
     <string>Test in IDLE</string>
    </property>
