@@ -40,6 +40,8 @@ class MainWindow:
         self.ui.actionRegex_document.triggered.connect(self.show_document)
         self.ui.actionTest_in_IDLE_2.triggered.connect(self.test_in_idle)
         self.ui.comboBox.currentIndexChanged.connect(self.combobox_changed)
+        self.ui.lineEditPattern.returnPressed.connect(self.run)
+        self.ui.lineEditReplaceText.returnPressed.connect(self.run)
         self.copy_message = None
 
     def clear(self):
